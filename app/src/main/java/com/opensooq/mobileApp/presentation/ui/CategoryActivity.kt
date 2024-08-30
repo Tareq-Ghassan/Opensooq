@@ -9,8 +9,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -62,6 +60,8 @@ class CategoryActivity : AppCompatActivity() {
         lifecycleScope.launch {
             if (type == TYPE_CATEGORY) {
                 val categoriesJson = JsonUtils.loadJsonFromAsset(this@CategoryActivity, "categoriesAndsubCategories.json") ?: return@launch
+//                val attributesJson = JsonUtils.loadJsonFromAsset(this@CategoryActivity, "dynamic-attributes-and-options-raw.json") ?: return@launch
+//                val assignJson = JsonUtils.loadJsonFromAsset(this@CategoryActivity, "dynamic-attributes-assign-raw.json") ?: return@launch
                 viewModel.checkAndCacheJson(categoriesJson)
                 displayCategories()
             } else if (type == TYPE_SUBCATEGORY) {
