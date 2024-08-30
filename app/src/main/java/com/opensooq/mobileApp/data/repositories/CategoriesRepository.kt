@@ -32,7 +32,8 @@ class CategoriesRepository(private val realm: Realm, private val context: Contex
 
                     val category = query<MainCategory>("id == $0", categoryObj.getInt("id")).first().find()
                     if (category == null) {
-                        copyToRealm(MainCategory().apply {
+                        // Create and store a new category
+                        val newCategory = copyToRealm(MainCategory().apply {
                             id = categoryObj.getInt("id")
                             name = categoryObj.getString("name")
                             order = categoryObj.getInt("order")
@@ -44,26 +45,13 @@ class CategoriesRepository(private val realm: Realm, private val context: Contex
                             icon = categoryObj.getString("icon")
                             labelAr = categoryObj.getString("label_ar")
                         })
-                    } else {
-                        category.name = categoryObj.getString("name")
-                        category.order = categoryObj.getInt("order")
-                        category.parentId = categoryObj.getInt("parent_id")
-                        category.label = categoryObj.getString("label")
-                        category.labelEn = categoryObj.getString("label_en")
-                        category.hasChild = categoryObj.getInt("has_child") == 1
-                        category.reportingName = categoryObj.getString("reporting_name")
-                        category.icon = categoryObj.getString("icon")
-                        category.labelAr = categoryObj.getString("label_ar")
-                    }
 
-                    // Process subcategories
-                    if (categoryObj.has("subCategories")) {
-                        val subCategoriesArray = categoryObj.getJSONArray("subCategories")
-                        for (j in 0 until subCategoriesArray.length()) {
-                            val subCategoryObj = subCategoriesArray.getJSONObject(j)
-                            val subCategory = query<SubCategory>("id == $0", subCategoryObj.getInt("id")).first().find()
-                            if (subCategory == null) {
-                                copyToRealm(SubCategory().apply {
+                        // Process subcategories
+                        if (categoryObj.has("subCategories")) {
+                            val subCategoriesArray = categoryObj.getJSONArray("subCategories")
+                            for (j in 0 until subCategoriesArray.length()) {
+                                val subCategoryObj = subCategoriesArray.getJSONObject(j)
+                                val subCategory = copyToRealm(SubCategory().apply {
                                     id = subCategoryObj.getInt("id")
                                     name = subCategoryObj.getString("name")
                                     order = subCategoryObj.getInt("order")
@@ -75,16 +63,40 @@ class CategoriesRepository(private val realm: Realm, private val context: Contex
                                     icon = subCategoryObj.getString("icon")
                                     labelAr = subCategoryObj.getString("label_ar")
                                 })
-                            } else {
-                                subCategory.name = subCategoryObj.getString("name")
-                                subCategory.order = subCategoryObj.getInt("order")
-                                subCategory.parentId = subCategoryObj.getInt("parent_id")
-                                subCategory.label = subCategoryObj.getString("label")
-                                subCategory.labelEn = subCategoryObj.getString("label_en")
-                                subCategory.hasChild = subCategoryObj.getInt("has_child") == 0
-                                subCategory.reportingName = subCategoryObj.getString("reporting_name")
-                                subCategory.icon = subCategoryObj.getString("icon")
-                                subCategory.labelAr = subCategoryObj.getString("label_ar")
+                                newCategory.subCategories.add(subCategory) // Link subcategory to category
+                            }
+                        }
+                    } else {
+                        // Update existing category
+                        category.name = categoryObj.getString("name")
+                        category.order = categoryObj.getInt("order")
+                        category.parentId = categoryObj.getInt("parent_id")
+                        category.label = categoryObj.getString("label")
+                        category.labelEn = categoryObj.getString("label_en")
+                        category.hasChild = categoryObj.getInt("has_child") == 1
+                        category.reportingName = categoryObj.getString("reporting_name")
+                        category.icon = categoryObj.getString("icon")
+                        category.labelAr = categoryObj.getString("label_ar")
+
+                        // Clear existing subcategories and update them
+                        category.subCategories.clear()
+                        if (categoryObj.has("subCategories")) {
+                            val subCategoriesArray = categoryObj.getJSONArray("subCategories")
+                            for (j in 0 until subCategoriesArray.length()) {
+                                val subCategoryObj = subCategoriesArray.getJSONObject(j)
+                                val subCategory = copyToRealm(SubCategory().apply {
+                                    id = subCategoryObj.getInt("id")
+                                    name = subCategoryObj.getString("name")
+                                    order = subCategoryObj.getInt("order")
+                                    parentId = subCategoryObj.getInt("parent_id")
+                                    label = subCategoryObj.getString("label")
+                                    labelEn = subCategoryObj.getString("label_en")
+                                    hasChild = subCategoryObj.getInt("has_child") == 0
+                                    reportingName = subCategoryObj.getString("reporting_name")
+                                    icon = subCategoryObj.getString("icon")
+                                    labelAr = subCategoryObj.getString("label_ar")
+                                })
+                                category.subCategories.add(subCategory) // Link subcategory to category
                             }
                         }
                     }
