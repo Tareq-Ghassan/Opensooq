@@ -27,7 +27,12 @@ class CategoriesViewModel(private val repository: CategoriesRepository) : ViewMo
     suspend fun checkAndCacheJson(categoriesJson: String) {
         withContext(Dispatchers.IO) {
             repository.checkAndUpdateCategories(categoriesJson)
+            // After updating categories, fetch the latest data
+            fetchCategoriesFromRealm()
         }
+    }
+    private fun fetchCategoriesFromRealm() {
+        categoriesLiveData.postValue(repository.getCategories())
     }
 
     fun getSubCategories(categoryId: Int) {

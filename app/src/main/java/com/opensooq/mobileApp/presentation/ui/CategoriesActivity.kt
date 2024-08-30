@@ -2,6 +2,7 @@ package com.opensooq.mobileApp.presentation.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
@@ -19,6 +20,7 @@ import com.opensooq.mobileApp.data.repositories.CategoriesRepository
 import com.opensooq.mobileApp.presentation.viewmodels.CategoriesViewModel
 import com.opensooq.mobileApp.presentation.viewmodels.CategoriesViewModelFactory
 import com.opensooq.mobileApp.utils.JsonUtils
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -42,11 +44,9 @@ class CategoriesActivity : AppCompatActivity() {
             val categoriesJson = JsonUtils.loadJsonFromAsset(this@CategoriesActivity, "categoriesAndsubCategories.json") ?: return@launch
 //            val attributesJson = JsonUtils.loadJsonFromAsset(this@CategoriesActivity, "dynamic-attributes-and-options-raw.json") ?: return@launch
 //            val assignJson = JsonUtils.loadJsonFromAsset(this@CategoriesActivity, "dynamic-attributes-assign-raw.json") ?: return@launch
-
             viewModel.checkAndCacheJson(categoriesJson)
+            displayCategories()
         }
-
-        displayCategories()
 
     }
 
@@ -65,6 +65,8 @@ class CategoriesActivity : AppCompatActivity() {
         viewModel.categoriesLiveData.observe(this, Observer { categories ->
             categories?.let {
                 categoriesAdapter.setCategories(it)
+            } ?: run {
+                Log.e("CategoriesActivity", "No categories observed")
             }
         })
     }

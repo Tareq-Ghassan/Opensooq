@@ -5,7 +5,6 @@ import com.opensooq.mobileApp.data.database.RealmDatabase
 import io.realm.kotlin.Realm
 
 class Opensooq  : Application() {
-    lateinit var realm: Realm
     override fun onCreate() {
         super.onCreate()
 

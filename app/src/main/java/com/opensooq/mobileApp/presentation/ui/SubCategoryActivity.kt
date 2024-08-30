@@ -52,7 +52,6 @@ class SubCategoryActivity : AppCompatActivity() {
 
             viewModel.subCategoriesLiveData.observe(this) { subCategories ->
                 subCategories?.let {
-                    Log.d("SubCategoryActivity", "Subcategories loaded: ${it.size}")
                     categoriesAdapter.setSubCategories(it)
                 }?: Log.e("SubCategoryActivity", "No subcategories found")
             }
@@ -66,7 +65,7 @@ class SubCategoryActivity : AppCompatActivity() {
         // Enable the Up button (Back button)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        supportActionBar?.title = getString(R.string.Categories)
+        supportActionBar?.title = getString(R.string.select_subcategory)
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_common, menu)
