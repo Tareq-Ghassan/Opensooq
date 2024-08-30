@@ -2,7 +2,6 @@ package com.opensooq.mobileApp
 
 import android.app.Application
 import com.opensooq.mobileApp.data.database.RealmDatabase
-import io.realm.kotlin.Realm
 
 class Opensooq  : Application() {
     override fun onCreate() {

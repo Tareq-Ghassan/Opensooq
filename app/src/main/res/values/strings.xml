@@ -6,4 +6,5 @@
     <string name="Categories">Select Categories</string>
     <string name="image">Image</string>
     <string name="select_subcategory">Select Subcategory</string>
+    <string name="search_for_category_or_subcategory">search for category or subcategory</string>
 </resources>

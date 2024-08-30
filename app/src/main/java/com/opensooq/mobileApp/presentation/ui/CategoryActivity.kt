@@ -9,6 +9,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,11 +22,16 @@ import com.opensooq.mobileApp.data.repositories.CategoriesRepository
 import com.opensooq.mobileApp.presentation.viewmodels.CategoriesViewModel
 import com.opensooq.mobileApp.presentation.viewmodels.CategoriesViewModelFactory
 import com.opensooq.mobileApp.utils.JsonUtils
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+class CategoryActivity : AppCompatActivity() {
 
-class CategoriesActivity : AppCompatActivity() {
+    companion object {
+        const val TYPE = "type"
+        const val TYPE_CATEGORY = "category"
+        const val TYPE_SUBCATEGORY = "subcategory"
+        const val CATEGORY_ID = "category_id"
+    }
 
     private val viewModel: CategoriesViewModel by viewModels {
         val realmInstance = RealmDatabase.getInstance()
@@ -33,59 +40,74 @@ class CategoriesActivity : AppCompatActivity() {
     }
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var categoriesAdapter : CategoriesAdapter
+    private lateinit var categoriesAdapter: CategoriesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_categories)
+        setContentView(R.layout.activity_category)
         setupActionBar()
-        lifecycleScope.launch {
-            val categoriesJson = JsonUtils.loadJsonFromAsset(this@CategoriesActivity, "categoriesAndsubCategories.json") ?: return@launch
-//            val attributesJson = JsonUtils.loadJsonFromAsset(this@CategoriesActivity, "dynamic-attributes-and-options-raw.json") ?: return@launch
-//            val assignJson = JsonUtils.loadJsonFromAsset(this@CategoriesActivity, "dynamic-attributes-assign-raw.json") ?: return@launch
-            viewModel.checkAndCacheJson(categoriesJson)
-            displayCategories()
-        }
 
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        categoriesAdapter = CategoriesAdapter { item ->
+            onItemClicked(item)
+        }
+        recyclerView.adapter = categoriesAdapter
+
+        val type = intent.getStringExtra(TYPE) ?: TYPE_CATEGORY
+        val categoryId = intent.getIntExtra(CATEGORY_ID, 0)
+
+        lifecycleScope.launch {
+            if (type == TYPE_CATEGORY) {
+                val categoriesJson = JsonUtils.loadJsonFromAsset(this@CategoryActivity, "categoriesAndsubCategories.json") ?: return@launch
+                viewModel.checkAndCacheJson(categoriesJson)
+                displayCategories()
+            } else if (type == TYPE_SUBCATEGORY) {
+                displaySubCategories(categoryId)
+            }
+        }
     }
 
     private fun displayCategories() {
-
-
-        recyclerView = findViewById(R.id.recyclerView)
-
-        categoriesAdapter = CategoriesAdapter { category ->
-            onCategoryClicked(category)
-        }
-        recyclerView.adapter = categoriesAdapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        // Observe the LiveData
         viewModel.categoriesLiveData.observe(this, Observer { categories ->
             categories?.let {
                 categoriesAdapter.setCategories(it)
             } ?: run {
-                Log.e("CategoriesActivity", "No categories observed")
+                Log.e("ListingActivity", "No categories observed")
             }
         })
     }
 
-    private fun onCategoryClicked(category: MainCategory) {
-        val intent = Intent(this, SubCategoryActivity::class.java)
-        intent.putExtra("CATEGORY_ID", category.id)
-        intent.putExtra("CATEGORY_NAME", category.labelEn)
+    private fun displaySubCategories(categoryId: Int) {
+        viewModel.getSubCategories(categoryId)
+        viewModel.subCategoriesLiveData.observe(this, Observer { subCategories ->
+            subCategories?.let {
+                categoriesAdapter.setSubCategories(it)
+            } ?: run {
+                Log.e("ListingActivity", "No subcategories observed")
+            }
+        })
+    }
+
+    private fun onItemClicked(category: MainCategory) {
+        val intent = Intent(this, CategoryActivity::class.java).apply {
+            putExtra(TYPE, TYPE_SUBCATEGORY)
+            putExtra(CATEGORY_ID, category.id)
+        }
         startActivity(intent)
     }
 
     private fun setupActionBar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-
-        // Enable the Up button (Back button)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        supportActionBar?.title = getString(R.string.Categories)
+        supportActionBar?.title = if (intent.getStringExtra(TYPE) == TYPE_CATEGORY) {
+            getString(R.string.Categories)
+        } else {
+            getString(R.string.select_subcategory)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
