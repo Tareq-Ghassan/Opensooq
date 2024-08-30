@@ -1,7 +1,11 @@
 package com.opensooq.mobileApp.utils
 
 import android.content.Context
+import com.opensooq.mobileApp.data.models.FieldLabel
+import com.opensooq.mobileApp.data.models.Fields
 import com.opensooq.mobileApp.data.models.MainCategory
+import com.opensooq.mobileApp.data.models.Options
+import com.opensooq.mobileApp.data.models.SearchFlow
 import com.opensooq.mobileApp.data.models.SubCategory
 import org.json.JSONObject
 
@@ -73,5 +77,101 @@ object JsonUtils {
             icon = subCategoryObj.getString("icon")
             labelAr = subCategoryObj.getString("label_ar")
         }
+    }
+
+
+    fun parseFieldLabels(jsonString: String): List<FieldLabel> {
+        val fieldLabels = mutableListOf<FieldLabel>()
+        val jsonObject = JSONObject(jsonString)
+        val dataObject = jsonObject.getJSONObject("result").getJSONObject("data")
+        val fieldsLabelsArray = dataObject.getJSONArray("fields_labels")
+
+        for (i in 0 until fieldsLabelsArray.length()) {
+            val fieldLabelObj = fieldsLabelsArray.getJSONObject(i)
+            val fieldLabel = FieldLabel().apply {
+                fieldName = fieldLabelObj.getString("field_name")
+                labelAr = fieldLabelObj.getString("label_ar")
+                labelEn = fieldLabelObj.getString("label_en")
+            }
+            fieldLabels.add(fieldLabel)
+        }
+        return fieldLabels
+    }
+
+    fun parseSearchFlow(jsonString: String): List<SearchFlow> {
+        val searchFlows = mutableListOf<SearchFlow>()
+        val jsonObject = JSONObject(jsonString)
+        val dataObject = jsonObject.getJSONObject("result").getJSONObject("data")
+        val searchFlowArray = dataObject.getJSONArray("search_flow")
+
+        for (i in 0 until searchFlowArray.length()) {
+            val searchFlowObj = searchFlowArray.getJSONObject(i)
+            val searchFlow = SearchFlow().apply {
+                categoryId = searchFlowObj.getInt("category_id")
+                val orderArray = searchFlowObj.getJSONArray("order")
+                for (j in 0 until orderArray.length()) {
+                    order.add(orderArray.getString(j))
+                }
+            }
+            searchFlows.add(searchFlow)
+        }
+        return searchFlows
+    }
+
+    fun parseFields(jsonString: String): List<Fields> {
+        val fieldLabels = mutableListOf<Fields>()
+        val jsonObject = JSONObject(jsonString)
+        val dataObject = jsonObject.getJSONObject("result").getJSONObject("data")
+        val fieldsArray = dataObject.getJSONArray("fields")
+
+        for (i in 0 until fieldsArray.length()) {
+            val fieldObj = fieldsArray.getJSONObject(i)
+            val fields = Fields().apply {
+                id =fieldObj.getInt("id")
+                name =fieldObj.getString("name")
+                dataType =fieldObj.getString("data_type")
+                parentId = fieldObj.getInt("parent_id")
+                parentName = if (fieldObj.has("parent_name") && !fieldObj.isNull("parent_name")) {
+                    fieldObj.getString("parent_name")
+                } else {
+                    null
+                }
+            }
+            fieldLabels.add(fields)
+        }
+        return fieldLabels
+    }
+
+    fun parseOptions(jsonString: String): List<Options> {
+        val options = mutableListOf<Options>()
+        val jsonObject = JSONObject(jsonString)
+        val dataObject = jsonObject.getJSONObject("result").getJSONObject("data")
+        val optionsArray = dataObject.getJSONArray("options")
+
+        for (i in 0 until optionsArray.length()) {
+            val optionObj = optionsArray.getJSONObject(i)
+            val optionsTemp = Options().apply {
+                id =optionObj.getString("id")
+                fieldId =optionObj.getString("field_id")
+                label =optionObj.getString("label")
+                labelEn =optionObj.getString("label_en")
+                value =optionObj.getString("value")
+                optionImg = if (optionObj.has("option_img") && !optionObj.isNull("option_img")) {
+                    optionObj.getString("option_img")
+                } else {
+                    null
+                }
+                hasChild =optionObj.getString("has_child")
+                parentId = if (optionObj.has("parent_id") && !optionObj.isNull("parent_id")) {
+                    optionObj.getString("parent_id")
+                } else {
+                    null
+                }
+                order =optionObj.getString("order")
+
+            }
+            options.add(optionsTemp)
+        }
+        return options
     }
 }

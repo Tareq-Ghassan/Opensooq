@@ -10,4 +10,12 @@
     android:theme="@style/AppTheme"
     tools:context=".presentation.ui.FilterActivity">
 
+    <include
+        android:id="@+id/screen_size_card"
+        layout="@layout/range_select_view"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

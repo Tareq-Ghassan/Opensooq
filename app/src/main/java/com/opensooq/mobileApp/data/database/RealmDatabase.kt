@@ -1,10 +1,12 @@
 package com.opensooq.mobileApp.data.database
 
-import com.opensooq.mobileApp.data.models.DynamicAttributeAssignment
-import com.opensooq.mobileApp.data.models.DynamicAttributeField
+import com.opensooq.mobileApp.data.models.FieldLabel
+import com.opensooq.mobileApp.data.models.Fields
 import com.opensooq.mobileApp.data.models.MainCategory
 import com.opensooq.mobileApp.data.models.SubCategory
 import com.opensooq.mobileApp.data.models.Metadata
+import com.opensooq.mobileApp.data.models.Options
+import com.opensooq.mobileApp.data.models.SearchFlow
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 
@@ -20,8 +22,10 @@ object RealmDatabase {
                 schema = setOf(
                     MainCategory::class,
                     SubCategory::class,
-                    DynamicAttributeAssignment::class,
-                    DynamicAttributeField::class,
+                    SearchFlow::class,
+                    FieldLabel::class,
+                    Fields::class,
+                    Options::class,
                     Metadata::class
                 )
             )

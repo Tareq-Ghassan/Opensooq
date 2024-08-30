@@ -10,17 +10,32 @@ import java.security.MessageDigest
 
 class CategoriesRepository(private val realm: Realm, private val context: Context) {
 
-    fun checkAndUpdateCategories(categoriesJson: String,attributesJson: String) {
-        val newHash = calculateHash(categoriesJson)
-        val metadata = getMetadata()
+    fun checkAndUpdateCategories(categoriesJson: String,assignJson: String, attributesJson : String) {
+        val categoriesHash = calculateHash(categoriesJson)
+        val assignHash = calculateHash(assignJson)
+        val attributesHash = calculateHash(attributesJson)
 
-        if (metadata == null || metadata.jsonHash != newHash) {
-            updateCategories(categoriesJson, newHash, metadata)
+        val categoriesMetadata = getMetadata("categories_metadata")
+        val assignMetadata = getMetadata("assign_metadata")
+        val attributesMetadata = getMetadata("attributes_metadata")
+
+
+        // Handle Categories JSON
+        if (categoriesMetadata == null || categoriesMetadata.jsonHash != categoriesHash) {
+            updateCategories(categoriesJson, categoriesHash, categoriesMetadata)
+        }
+        // Handle Assign JSON
+        if (assignMetadata == null || assignMetadata.jsonHash != assignHash) {
+            updateSearchFlowAndFieldsLabel(assignJson, assignHash, assignMetadata)
+        }
+        // Handle Attributes JSON
+        if (attributesMetadata == null || attributesMetadata.jsonHash != attributesHash) {
+            updateOptionsAndFields(attributesJson, attributesHash, attributesMetadata)
         }
     }
 
-    private fun getMetadata(): Metadata? {
-        return realm.query<Metadata>("id == $0", "categories_metadata").first().find()
+    private fun getMetadata(metadataId: String): Metadata? {
+        return realm.query<Metadata>("id == $0", metadataId).first().find()
     }
 
     private fun updateCategories(categoriesJson: String, newHash: String, metadata: Metadata?) {
@@ -40,6 +55,44 @@ class CategoriesRepository(private val realm: Realm, private val context: Contex
             copyToRealm(metadataToUpdate)
         }
     }
+
+    private fun updateSearchFlowAndFieldsLabel(assignJson: String, newHash: String, metadata: Metadata?) {
+        realm.writeBlocking {
+            val searchFlowList = JsonUtils.parseSearchFlow(assignJson)
+            val fieldLabelsList = JsonUtils.parseFieldLabels(assignJson)
+
+            searchFlowList.forEach { searchFlow ->
+                copyToRealm(searchFlow)
+            }
+
+            fieldLabelsList.forEach { fieldLabel ->
+                copyToRealm(fieldLabel)
+            }
+
+            val metadataToUpdate = metadata ?: Metadata().apply { id = "assign_metadata" }
+            metadataToUpdate.jsonHash = newHash
+            copyToRealm(metadataToUpdate)
+        }
+    }
+    private fun updateOptionsAndFields(attributesJson: String, newHash: String, metadata: Metadata?) {
+        realm.writeBlocking {
+            val optionsList = JsonUtils.parseOptions(attributesJson)
+            val fieldList = JsonUtils.parseFields(attributesJson)
+
+            optionsList.forEach { option ->
+                copyToRealm(option)
+            }
+
+            fieldList.forEach { field ->
+                copyToRealm(field)
+            }
+
+            val metadataToUpdate = metadata ?: Metadata().apply { id = "attributes_metadata" }
+            metadataToUpdate.jsonHash = newHash
+            copyToRealm(metadataToUpdate)
+        }
+    }
+
 
     private fun updateCategory(existingCategory: MainCategory, newCategory: MainCategory) {
         existingCategory.apply {

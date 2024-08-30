@@ -60,9 +60,9 @@ class CategoryActivity : AppCompatActivity() {
         lifecycleScope.launch {
             if (type == TYPE_CATEGORY) {
                 val categoriesJson = JsonUtils.loadJsonFromAsset(this@CategoryActivity, "categoriesAndsubCategories.json") ?: return@launch
+                val assignJson = JsonUtils.loadJsonFromAsset(this@CategoryActivity, "dynamic-attributes-assign-raw.json") ?: return@launch
                 val attributesJson = JsonUtils.loadJsonFromAsset(this@CategoryActivity, "dynamic-attributes-and-options-raw.json") ?: return@launch
-//                val assignJson = JsonUtils.loadJsonFromAsset(this@CategoryActivity, "dynamic-attributes-assign-raw.json") ?: return@launch
-                viewModel.checkAndCacheJson(categoriesJson,attributesJson)
+                viewModel.checkAndCacheJson(categoriesJson,assignJson,attributesJson)
                 displayCategories()
             } else if (type == TYPE_SUBCATEGORY) {
                 displaySubCategories(categoryId)
@@ -121,7 +121,7 @@ class CategoryActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_common, menu)
+        menuInflater.inflate(R.menu.category_menu, menu)
         return true
     }
 
