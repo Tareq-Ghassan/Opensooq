@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Opensooq"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.FilterActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.CategoryActivity"
             android:exported="true"
             android:theme="@style/AppTheme">

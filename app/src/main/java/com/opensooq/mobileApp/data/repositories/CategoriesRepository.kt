@@ -10,7 +10,7 @@ import java.security.MessageDigest
 
 class CategoriesRepository(private val realm: Realm, private val context: Context) {
 
-    fun checkAndUpdateCategories(categoriesJson: String) {
+    fun checkAndUpdateCategories(categoriesJson: String,attributesJson: String) {
         val newHash = calculateHash(categoriesJson)
         val metadata = getMetadata()
 

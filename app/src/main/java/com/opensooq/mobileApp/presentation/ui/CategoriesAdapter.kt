@@ -1,6 +1,7 @@
 package com.opensooq.mobileApp.presentation.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.opensooq.mobileApp.R
+import com.opensooq.mobileApp.data.models.CategoryItem
 import com.opensooq.mobileApp.data.models.MainCategory
 import com.opensooq.mobileApp.data.models.SubCategory
 import com.squareup.picasso.Picasso
 
-class CategoriesAdapter(private val onItemClicked: (MainCategory) -> Unit) : RecyclerView.Adapter<CategoriesAdapter.CategoriesViewHolder>() {
+class CategoriesAdapter(private val onItemClicked: (CategoryItem) -> Unit) : RecyclerView.Adapter<CategoriesAdapter.CategoriesViewHolder>() {
 
     private  val categories: MutableList<MainCategory> = mutableListOf()
     private  val subCategories: MutableList<SubCategory> = mutableListOf()
@@ -42,13 +44,10 @@ class CategoriesAdapter(private val onItemClicked: (MainCategory) -> Unit) : Rec
                 .into(holder.categoryIcon)
 
             holder.itemView.setOnClickListener {
-                onItemClicked(category)
+                onItemClicked(CategoryItem.MainCategoryItem(category))
             }
         } else {
             val subCategory = subCategories[position]
-            val category = categories.find { category ->
-                subCategory.parentId == category.id
-            }
             holder.categoryName.text = subCategory.labelEn
             Picasso.get()
                 .load(subCategory.icon)
@@ -57,11 +56,7 @@ class CategoriesAdapter(private val onItemClicked: (MainCategory) -> Unit) : Rec
                 .into(holder.categoryIcon)
 
             holder.itemView.setOnClickListener {
-                category?.let {
-                    onItemClicked(it)
-                } ?: run {
-                    Log.e("CategoriesAdapter", "Parent category not found for SubCategory: ${subCategory.labelEn}")
-                }
+                onItemClicked(CategoryItem.SubCategoryItem(subCategory))
             }
         }
     }

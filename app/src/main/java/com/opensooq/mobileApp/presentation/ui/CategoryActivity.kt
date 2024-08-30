@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.opensooq.mobileApp.R
 import com.opensooq.mobileApp.data.database.RealmDatabase
-import com.opensooq.mobileApp.data.models.MainCategory
+import com.opensooq.mobileApp.data.models.CategoryItem
 import com.opensooq.mobileApp.data.repositories.CategoriesRepository
 import com.opensooq.mobileApp.presentation.viewmodels.CategoriesViewModel
 import com.opensooq.mobileApp.presentation.viewmodels.CategoriesViewModelFactory
@@ -60,9 +60,9 @@ class CategoryActivity : AppCompatActivity() {
         lifecycleScope.launch {
             if (type == TYPE_CATEGORY) {
                 val categoriesJson = JsonUtils.loadJsonFromAsset(this@CategoryActivity, "categoriesAndsubCategories.json") ?: return@launch
-//                val attributesJson = JsonUtils.loadJsonFromAsset(this@CategoryActivity, "dynamic-attributes-and-options-raw.json") ?: return@launch
+                val attributesJson = JsonUtils.loadJsonFromAsset(this@CategoryActivity, "dynamic-attributes-and-options-raw.json") ?: return@launch
 //                val assignJson = JsonUtils.loadJsonFromAsset(this@CategoryActivity, "dynamic-attributes-assign-raw.json") ?: return@launch
-                viewModel.checkAndCacheJson(categoriesJson)
+                viewModel.checkAndCacheJson(categoriesJson,attributesJson)
                 displayCategories()
             } else if (type == TYPE_SUBCATEGORY) {
                 displaySubCategories(categoryId)
@@ -91,12 +91,22 @@ class CategoryActivity : AppCompatActivity() {
         })
     }
 
-    private fun onItemClicked(category: MainCategory) {
-        val intent = Intent(this, CategoryActivity::class.java).apply {
-            putExtra(TYPE, TYPE_SUBCATEGORY)
-            putExtra(CATEGORY_ID, category.id)
+    private fun onItemClicked(item: CategoryItem) {
+        when (item) {
+            is CategoryItem.MainCategoryItem -> {
+                val intent = Intent(this, CategoryActivity::class.java).apply {
+                    putExtra(TYPE, TYPE_SUBCATEGORY)
+                    putExtra(CATEGORY_ID, item.category.id)
+                }
+                startActivity(intent)
+            }
+            is CategoryItem.SubCategoryItem -> {
+                val intent = Intent(this, FilterActivity::class.java).apply {
+                    putExtra("SUBCATEGORY_ID", item.subCategory.id)
+                }
+                startActivity(intent)
+            }
         }
-        startActivity(intent)
     }
 
     private fun setupActionBar() {
