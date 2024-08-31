@@ -4,20 +4,24 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckedTextView
+import android.widget.CheckBox
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.opensooq.mobileApp.R
 import com.opensooq.mobileApp.data.models.Options
 
-class MultiSelectAdapter(private var options: List<Options>) : RecyclerView.Adapter<MultiSelectAdapter.OptionViewHolder>() {
+class MultiSelectAdapter(
+    private var options: List<Options>,
+    private val selectedOptions: MutableList<Options>
+) : RecyclerView.Adapter<MultiSelectAdapter.MultiSelectViewHolder>() {
 
-    private val selectedOptions = mutableSetOf<Options>()
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OptionViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(android.R.layout.simple_list_item_multiple_choice, parent, false)
-        return OptionViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MultiSelectViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.multi_select_item, parent, false)
+        return MultiSelectViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: OptionViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MultiSelectViewHolder, position: Int) {
         val option = options[position]
         holder.bind(option, selectedOptions.contains(option))
     }
@@ -25,28 +29,28 @@ class MultiSelectAdapter(private var options: List<Options>) : RecyclerView.Adap
     override fun getItemCount(): Int = options.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateList(newOptions: List<Options>) {
-        options = newOptions
+    fun updateList(filteredOptions: List<Options>) {
+        options = filteredOptions
         notifyDataSetChanged()
     }
 
-    fun getSelectedOptions(): List<Options> = selectedOptions.toList()
+    fun getSelectedOptions(): List<Options> = selectedOptions
 
-    inner class OptionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val checkBox = itemView as CheckedTextView
+    inner class MultiSelectViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val textView: TextView = itemView.findViewById(R.id.text_view)
+        private val checkBox: CheckBox = itemView.findViewById(R.id.check_box)
 
-        @SuppressLint("NotifyDataSetChanged")
         fun bind(option: Options, isSelected: Boolean) {
-            checkBox.text = option.labelEn
+            textView.text = option.labelEn
             checkBox.isChecked = isSelected
 
-            checkBox.setOnClickListener {
+            itemView.setOnClickListener {
+                checkBox.isChecked = !checkBox.isChecked
                 if (checkBox.isChecked) {
                     selectedOptions.add(option)
                 } else {
                     selectedOptions.remove(option)
                 }
-                notifyDataSetChanged()
             }
         }
     }

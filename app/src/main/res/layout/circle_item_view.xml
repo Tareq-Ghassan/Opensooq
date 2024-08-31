@@ -18,7 +18,7 @@
             android:id="@+id/circle_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/circle_background"
+            android:background="@drawable/circle_background_selector"
             android:contentDescription="@string/image_icon"
             android:scaleType="centerCrop" />
 
@@ -30,7 +30,7 @@
             android:textColor="@android:color/black"
             android:textSize="14sp"
             android:visibility="gone"
-            android:background="@drawable/circle_background"/>
+            android:background="@drawable/circle_background_selector"/>
     </FrameLayout>
 
 </LinearLayout>
