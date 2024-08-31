@@ -18,4 +18,35 @@ open class SearchFlow : RealmObject {
 
     // This is a list of strings that represent the order of fields for a particular category.
     var order: RealmList<String> = realmListOf()
+
+    /**
+     * Checks if this `SearchFlow` object is equal to another object.
+     *
+     * Two `SearchFlow` objects are considered equal if they have the same `categoryId` and `order` properties.
+     *
+     * @param other The other object to compare this `SearchFlow` to.
+     * @return `true` if the objects are considered equal, `false` otherwise.
+     */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is SearchFlow) return false
+
+        if (categoryId != other.categoryId) return false
+        if (order != other.order) return false
+
+        return true
+    }
+
+    /**
+     * Computes the hash code for this `SearchFlow` object.
+     *
+     * The hash code is computed based on the `categoryId` and `order` properties.
+     *
+     * @return The computed hash code.
+     */
+    override fun hashCode(): Int {
+        var result = categoryId
+        result = 31 * result + order.hashCode()
+        return result
+    }
 }
