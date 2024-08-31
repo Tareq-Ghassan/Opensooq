@@ -1,4 +1,4 @@
-package com.opensooq.mobileApp.presentation.ui
+package com.opensooq.mobileApp.presentation.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -17,6 +17,7 @@ import com.opensooq.mobileApp.R
 import com.opensooq.mobileApp.data.database.RealmDatabase
 import com.opensooq.mobileApp.data.models.CategoryItem
 import com.opensooq.mobileApp.data.repositories.CategoriesRepository
+import com.opensooq.mobileApp.presentation.ui.adapters.CategoriesAdapter
 import com.opensooq.mobileApp.presentation.viewmodels.CategoriesViewModel
 import com.opensooq.mobileApp.presentation.viewmodels.CategoriesViewModelFactory
 import com.opensooq.mobileApp.utils.JsonUtils

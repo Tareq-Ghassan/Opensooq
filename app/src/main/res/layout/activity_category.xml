@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:theme="@style/AppTheme"
-    tools:context=".presentation.ui.CategoryActivity">
+    tools:context=".presentation.ui.activities.CategoryActivity">
 
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
@@ -22,7 +22,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_search_field"
-        android:name="com.opensooq.mobileApp.presentation.ui.SearchFragment"
+        android:name="com.opensooq.mobileApp.presentation.ui.fragments.SearchFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

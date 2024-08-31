@@ -1,4 +1,4 @@
-package com.opensooq.mobileApp.presentation.ui
+package com.opensooq.mobileApp.presentation.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

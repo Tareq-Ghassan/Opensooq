@@ -1,15 +1,16 @@
-package com.opensooq.mobileApp.presentation.ui
+package com.opensooq.mobileApp.presentation.ui.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.opensooq.mobileApp.R
 import com.opensooq.mobileApp.data.models.FieldLabel
 import com.opensooq.mobileApp.data.models.Fields
 import com.opensooq.mobileApp.data.models.Options
+import com.opensooq.mobileApp.presentation.ui.viewholders.BooleanViewHolder
+import com.opensooq.mobileApp.presentation.ui.viewholders.DefaultViewHolder
+import com.opensooq.mobileApp.presentation.ui.viewholders.NumericViewHolder
+import com.opensooq.mobileApp.presentation.ui.viewholders.StringIconViewHolder
 
 class FilterAdapter(private val items: List<Pair<Fields, FieldLabel>>,private val nestedItems: List<List<Options>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -70,7 +71,7 @@ class FilterAdapter(private val items: List<Pair<Fields, FieldLabel>>,private va
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = items[position]
         when (holder) {
-            is NumericViewHolder -> holder.bind(item.second.labelEn)
+            is NumericViewHolder -> holder.bind(item.second.labelEn, nestedItems[position])
             is StringIconViewHolder -> holder.bind(item.first, item.second.labelEn, nestedItems[position], "")
             is BooleanViewHolder ->  holder.bind(item.second.labelEn)
             is DefaultViewHolder -> holder.bind()
@@ -78,47 +79,4 @@ class FilterAdapter(private val items: List<Pair<Fields, FieldLabel>>,private va
     }
 
     override fun getItemCount(): Int = items.size
-
-    class NumericViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val label: TextView = itemView.findViewById(R.id.list_Numeric_label)
-
-        fun bind(labelText: String) {
-            label.text = labelText
-        }
-    }
-
-
-    class StringIconViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val label: TextView = itemView.findViewById(R.id.item_title)
-        private val recyclerView: RecyclerView = itemView.findViewById(R.id.horizontal_recycler_view)
-        private val selectedItems: TextView = itemView.findViewById(R.id.selected_items)
-
-        fun bind(field: Fields, labelText: String, options: List<Options>, customText: String) {
-            // Set the title label
-            label.text = labelText
-
-            // Set up the RecyclerView with horizontal layout
-            recyclerView.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
-            recyclerView.adapter = ListStringIconAdapter(options) // Pass the list of Strings
-
-            // Set the customizable text at the bottom
-            selectedItems.text = customText
-        }
-    }
-
-    class BooleanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val label: TextView = itemView.findViewById(R.id.list_boolean_label)
-//        private val toggleButton: ToggleButton = itemView.findViewById(R.id.boolean_toggle)
-
-        fun bind(labelText: String) {
-            label.text = labelText
-            // You can set the toggle button state based on your data or leave it for the user to toggle
-        }
-    }
-
-    class DefaultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind() {
-            // Optionally bind some default content or leave empty
-        }
-    }
 }

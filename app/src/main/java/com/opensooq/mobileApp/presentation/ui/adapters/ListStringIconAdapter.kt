@@ -1,4 +1,4 @@
-package com.opensooq.mobileApp.presentation.ui
+package com.opensooq.mobileApp.presentation.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.View

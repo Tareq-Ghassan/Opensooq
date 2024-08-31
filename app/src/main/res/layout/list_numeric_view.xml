@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp">
+        >
 
         <!-- Title Row -->
         <TextView
@@ -22,29 +22,40 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:paddingBottom="8dp"
+            android:padding="8dp"
             android:textColor="@android:color/black" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/rose" />
 
         <!-- From Row -->
         <LinearLayout
+            android:id="@+id/from_row_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingVertical="8dp">
+            android:paddingVertical="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackground">
 
             <TextView
                 android:id="@+id/from_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="From"
+                android:text="@string/from"
                 android:textSize="14sp"
+                android:padding="8dp"
                 android:textColor="@android:color/black" />
 
             <TextView
                 android:id="@+id/from_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="23 inch"
                 android:textSize="14sp"
                 android:textColor="@android:color/black" />
         </LinearLayout>
@@ -53,30 +64,36 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+            android:background="@color/rose" />
 
         <!-- To Row -->
         <LinearLayout
+            android:id="@+id/to_row_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingVertical="8dp">
+            android:paddingVertical="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackground">
 
             <TextView
                 android:id="@+id/to_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="To"
+                android:text="@string/to"
                 android:textSize="14sp"
+                android:padding="8dp"
                 android:textColor="@android:color/black" />
 
             <TextView
                 android:id="@+id/to_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="32 inch"
                 android:textSize="14sp"
+                android:padding="8dp"
                 android:textColor="@android:color/black" />
         </LinearLayout>
 

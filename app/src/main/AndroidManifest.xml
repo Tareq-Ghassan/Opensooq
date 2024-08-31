@@ -16,10 +16,10 @@
         android:theme="@style/Theme.Opensooq"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.ui.FilterActivity"
+            android:name=".presentation.ui.activities.FilterActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.CategoryActivity"
+            android:name=".presentation.ui.activities.CategoryActivity"
             android:exported="true"
             android:theme="@style/AppTheme">
             <intent-filter>

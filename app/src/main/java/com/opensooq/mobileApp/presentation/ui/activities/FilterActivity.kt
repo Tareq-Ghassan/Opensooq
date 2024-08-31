@@ -1,4 +1,4 @@
-package com.opensooq.mobileApp.presentation.ui
+package com.opensooq.mobileApp.presentation.ui.activities
 
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.opensooq.mobileApp.R
 import com.opensooq.mobileApp.data.database.RealmDatabase
 import com.opensooq.mobileApp.data.repositories.FilterRepository
+import com.opensooq.mobileApp.presentation.ui.adapters.FilterAdapter
 import com.opensooq.mobileApp.presentation.viewmodels.FilterViewModel
 import com.opensooq.mobileApp.presentation.viewmodels.FilterViewModelFactory
 
