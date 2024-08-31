@@ -75,6 +75,7 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.inline)
     testImplementation(libs.robolectric)
+    testImplementation(libs.mockk)
 
 
 }

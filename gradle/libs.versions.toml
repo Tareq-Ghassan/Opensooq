@@ -15,6 +15,7 @@ activity = "1.8.0"
 constraintlayout = "2.1.4"
 mockitoCore = "4.11.0"
 mockitoInline = "4.4.0"
+mockk = "1.12.0"
 picasso = "2.71828"
 realmDB = "1.11.0"
 lifecycleRuntimeKtx = "2.8.3"
@@ -41,6 +42,7 @@ library-base = { module = "io.realm.kotlin:library-base", version.ref = "realmDB
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
