@@ -1,56 +1,36 @@
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="8dp"
     app:cardElevation="4dp"
     app:cardCornerRadius="8dp">
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
-
-    <!-- Title -->
-    <TextView
-        android:id="@+id/list_boolean_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:layout_marginBottom="8dp"
-        android:textColor="@android:color/black" />
-
-    <!-- Grid Items -->
-    <GridLayout
-        android:id="@+id/boolean_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border_drawable"
-        android:columnCount="3"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="8dp">
 
-        <ToggleButton
+        <!-- Title -->
+        <TextView
+            android:id="@+id/list_boolean_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textOn="Air Conditioning"
-            android:textOff="Air Conditioning"
-            android:checked="false"
-            android:background="@drawable/toggle_button_background" />
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"
+            android:textColor="@android:color/black" />
 
-        <ToggleButton
-            android:layout_width="wrap_content"
+        <!-- Use RecyclerView instead of GridLayout -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/boolean_grid"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textOn="Heating"
-            android:textOff="Heating"
-            android:checked="false"
-            android:background="@drawable/toggle_button_background" />
+            android:layout_gravity="center"
+            android:background="@drawable/border_drawable"
+            tools:listitem="@layout/boolean_option_item" />
 
-
-    </GridLayout>
-
-</LinearLayout>
-
+    </LinearLayout>
 </androidx.cardview.widget.CardView>
