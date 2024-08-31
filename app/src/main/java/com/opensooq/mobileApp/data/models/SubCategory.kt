@@ -30,5 +30,49 @@ open class SubCategory : RealmObject {
     var reportingName: String = ""
     var icon: String = ""
     var labelAr: String = ""
+
+    /**
+     * Compares this `SubCategory` object to another object for equality.
+     * The comparison checks if all properties of the `SubCategory` objects are identical.
+     *
+     * @param other The object to compare this `SubCategory` against.
+     * @return `true` if the specified object is equal to this `SubCategory`; `false` otherwise.
+     */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is SubCategory) return false
+
+        return id == other.id &&
+                name == other.name &&
+                order == other.order &&
+                parentId == other.parentId &&
+                label == other.label &&
+                labelEn == other.labelEn &&
+                hasChild == other.hasChild &&
+                reportingName == other.reportingName &&
+                icon == other.icon &&
+                labelAr == other.labelAr
+    }
+
+    /**
+     * Returns a hash code value for this `SubCategory` object.
+     * The hash code is generated based on the values of the properties.
+     * This is important for ensuring that `SubCategory` objects can be used in hash-based collections.
+     *
+     * @return The hash code value for this `SubCategory`.
+     */
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + name.hashCode()
+        result = 31 * result + order
+        result = 31 * result + parentId
+        result = 31 * result + label.hashCode()
+        result = 31 * result + labelEn.hashCode()
+        result = 31 * result + hasChild.hashCode()
+        result = 31 * result + reportingName.hashCode()
+        result = 31 * result + icon.hashCode()
+        result = 31 * result + labelAr.hashCode()
+        return result
+    }
 }
 
