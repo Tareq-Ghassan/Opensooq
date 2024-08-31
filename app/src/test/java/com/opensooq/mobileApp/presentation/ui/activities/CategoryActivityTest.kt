@@ -32,7 +32,7 @@ class CategoryActivityTest {
         lifecycle = LifecycleRegistry(mockActivity as LifecycleOwner)
         every { mockActivity.lifecycle } returns lifecycle
 
-        every { mockActivity.helper } returns mockHelper
+//        every { mockActivity.helper } returns mockHelper
 
         every { mockActivity.setSupportActionBar(any()) } just Runs
         every { mockActivity.supportActionBar } returns mockk<ActionBar> {
