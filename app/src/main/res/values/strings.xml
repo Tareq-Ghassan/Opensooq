@@ -8,4 +8,5 @@
     <string name="select_subcategory">Select Subcategory</string>
     <string name="search_for_category_or_subcategory">search for category or subcategory</string>
     <string name="filter">Filter</string>
+    <string name="image_icon">Image Icon</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.opensooq.mobileApp.data.models.FieldLabel
 import com.opensooq.mobileApp.data.models.Fields
+import com.opensooq.mobileApp.data.models.Options
 import com.opensooq.mobileApp.data.repositories.FilterRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,5 +40,9 @@ class FilterViewModel(private val repository: FilterRepository) : ViewModel() {
                 _fieldsAndLabelsToDisplay.postValue(fieldsAndLabels)
             }
         }
+    }
+
+    fun getOptionsForField(fieldId: String): List<Options> {
+        return repository.getOptionsByFieldId(fieldId)
     }
 }

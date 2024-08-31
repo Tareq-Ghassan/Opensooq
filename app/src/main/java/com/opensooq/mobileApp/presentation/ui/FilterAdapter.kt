@@ -3,15 +3,15 @@ package com.opensooq.mobileApp.presentation.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.opensooq.mobileApp.R
 import com.opensooq.mobileApp.data.models.FieldLabel
 import com.opensooq.mobileApp.data.models.Fields
-import com.squareup.picasso.Picasso
+import com.opensooq.mobileApp.data.models.Options
 
-class FilterAdapter(private val items: List<Pair<Fields, FieldLabel>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FilterAdapter(private val items: List<Pair<Fields, FieldLabel>>,private val nestedItems: List<List<Options>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private const val VIEW_TYPE_NUMERIC = 1
@@ -71,9 +71,9 @@ class FilterAdapter(private val items: List<Pair<Fields, FieldLabel>>) : Recycle
         val item = items[position]
         when (holder) {
             is NumericViewHolder -> holder.bind(item.second.labelEn)
-            is StringIconViewHolder -> holder.bind(item.first, item.second.labelEn)
+            is StringIconViewHolder -> holder.bind(item.first, item.second.labelEn, nestedItems[position], "")
             is BooleanViewHolder ->  holder.bind(item.second.labelEn)
-            is DefaultViewHolder -> holder.bind() // Optionally bind some default content
+            is DefaultViewHolder -> holder.bind()
         }
     }
 
@@ -87,19 +87,22 @@ class FilterAdapter(private val items: List<Pair<Fields, FieldLabel>>) : Recycle
         }
     }
 
-    class StringIconViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val label: TextView = itemView.findViewById(R.id.circle_text)
-        private val iconImage: ImageView = itemView.findViewById(R.id.circle_image)
 
-        fun bind(field: Fields, labelText: String) {
+    class StringIconViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val label: TextView = itemView.findViewById(R.id.item_title)
+        private val recyclerView: RecyclerView = itemView.findViewById(R.id.horizontal_recycler_view)
+        private val selectedItems: TextView = itemView.findViewById(R.id.selected_items)
+
+        fun bind(field: Fields, labelText: String, options: List<Options>, customText: String) {
+            // Set the title label
             label.text = labelText
-            if (field.name.contains("some_condition")) {
-                // Load image from URL
-                Picasso.get().load("your_image_url_here").into(iconImage)
-            } else {
-                // Set a default image or use text inside a circle
-                iconImage.setImageResource(R.drawable.icon_error) // Placeholder
-            }
+
+            // Set up the RecyclerView with horizontal layout
+            recyclerView.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
+            recyclerView.adapter = ListStringIconAdapter(options) // Pass the list of Strings
+
+            // Set the customizable text at the bottom
+            selectedItems.text = customText
         }
     }
 

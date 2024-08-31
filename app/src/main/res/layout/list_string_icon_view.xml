@@ -1,26 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/circle_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:background="@drawable/circle_background"
-        android:scaleType="centerCrop" />
-
+    <!-- Title -->
     <TextView
-        android:id="@+id/circle_text"
+        android:id="@+id/item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
+        android:textStyle="bold"
+        android:textSize="16sp"
         android:textColor="@android:color/black"
-        android:textSize="14sp" />
+        android:layout_gravity="start"
+        android:layout_marginBottom="8dp"/>
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/horizontal_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
+        android:scrollbars="horizontal"
+        android:padding="4dp"
+        android:clipToPadding="false" />
+
+    <!-- Customizable Text -->
+    <TextView
+        android:id="@+id/selected_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
+        android:layout_gravity="start" />
 </LinearLayout>

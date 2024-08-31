@@ -2,12 +2,8 @@ package com.opensooq.mobileApp.presentation.ui
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -15,12 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.opensooq.mobileApp.R
 import com.opensooq.mobileApp.data.database.RealmDatabase
-import com.opensooq.mobileApp.data.models.FieldLabel
-import com.opensooq.mobileApp.data.models.Fields
 import com.opensooq.mobileApp.data.repositories.FilterRepository
 import com.opensooq.mobileApp.presentation.viewmodels.FilterViewModel
 import com.opensooq.mobileApp.presentation.viewmodels.FilterViewModelFactory
-import com.squareup.picasso.Picasso
 
 class FilterActivity : AppCompatActivity() {
 
@@ -42,9 +35,16 @@ class FilterActivity : AppCompatActivity() {
 
         viewModel.loadFieldsForSubcategory(subcategoryId)
 
+
+        viewModel.loadFieldsForSubcategory(subcategoryId)
+
         viewModel.fieldsAndLabelsToDisplay.observe(this, Observer { fieldsAndLabels ->
-            fieldsAndLabels?.let {
-                val adapter = FilterAdapter(it)
+            fieldsAndLabels?.let { fieldsAndLabelsList ->
+                val nestedItems = fieldsAndLabelsList.map { pair ->
+                    viewModel.getOptionsForField(pair.first.id.toString())
+                }
+
+                val adapter = FilterAdapter(fieldsAndLabelsList, nestedItems)
                 recyclerView.adapter = adapter
             }
         })
