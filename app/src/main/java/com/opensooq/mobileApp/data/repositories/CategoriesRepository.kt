@@ -8,8 +8,23 @@ import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import java.security.MessageDigest
 
+/**
+ * Repository class responsible for managing and updating categories, search flows, field labels, and options.
+ * This class interacts with the Realm database and handles the caching and updating of JSON data.
+ *
+ * @param realm The Realm instance used to interact with the database.
+ * @param context The context used for accessing resources and assets.
+ */
 class CategoriesRepository(private val realm: Realm, private val context: Context) {
 
+     /**
+     * Checks and updates the categories, search flows, and options based on the provided JSON data.
+     * This method calculates the hash of each JSON and compares it with stored metadata to determine if an update is needed.
+     *
+     * @param categoriesJson The JSON string representing the categories.
+     * @param assignJson The JSON string representing the search flows and field labels.
+     * @param attributesJson The JSON string representing the options and fields.
+     */
     fun checkAndUpdateCategories(categoriesJson: String,assignJson: String, attributesJson : String) {
         val categoriesHash = calculateHash(categoriesJson)
         val assignHash = calculateHash(assignJson)
@@ -34,6 +49,12 @@ class CategoriesRepository(private val realm: Realm, private val context: Contex
         }
     }
 
+    /**
+     * Retrieves metadata based on the given metadata ID.
+     *
+     * @param metadataId The ID of the metadata to retrieve.
+     * @return The `Metadata` object if found, or null if not found.
+     */
     private fun getMetadata(metadataId: String): Metadata? {
         return realm.query<Metadata>("id == $0", metadataId).first().find()
     }
@@ -56,6 +77,14 @@ class CategoriesRepository(private val realm: Realm, private val context: Contex
         }
     }
 
+    /**
+     * Updates the search flow and field labels in the Realm database based on the provided JSON data.
+     * The method also updates the corresponding metadata with the new hash.
+     *
+     * @param assignJson The JSON string representing the search flows and field labels.
+     * @param newHash The new hash of the assign JSON.
+     * @param metadata The existing metadata, or null if not present.
+     */
     private fun updateSearchFlowAndFieldsLabel(assignJson: String, newHash: String, metadata: Metadata?) {
         realm.writeBlocking {
             val searchFlowList = JsonUtils.parseSearchFlow(assignJson)
@@ -74,6 +103,15 @@ class CategoriesRepository(private val realm: Realm, private val context: Contex
             copyToRealm(metadataToUpdate)
         }
     }
+
+    /**
+     * Updates the options and fields in the Realm database based on the provided JSON data.
+     * The method also updates the corresponding metadata with the new hash.
+     *
+     * @param attributesJson The JSON string representing the options and fields.
+     * @param newHash The new hash of the attributes JSON.
+     * @param metadata The existing metadata, or null if not present.
+     */
     private fun updateOptionsAndFields(attributesJson: String, newHash: String, metadata: Metadata?) {
         realm.writeBlocking {
             val optionsList = JsonUtils.parseOptions(attributesJson)
@@ -93,7 +131,14 @@ class CategoriesRepository(private val realm: Realm, private val context: Contex
         }
     }
 
-
+    /**
+     * Updates the categories in the Realm database based on the provided JSON data.
+     * The method also updates the corresponding metadata with the new hash.
+     *
+     * @param categoriesJson The JSON string representing the categories.
+     * @param newHash The new hash of the categories JSON.
+     * @param metadata The existing metadata, or null if not present.
+     */
     private fun updateCategory(existingCategory: MainCategory, newCategory: MainCategory) {
         existingCategory.apply {
             name = newCategory.name
@@ -111,10 +156,21 @@ class CategoriesRepository(private val realm: Realm, private val context: Contex
         }
     }
 
+    /**
+     * Retrieves all main categories from the Realm database.
+     *
+     * @return A mutable list of `MainCategory` objects.
+     */
     fun getCategories(): MutableList<MainCategory> {
         return realm.query<MainCategory>().find().toMutableList()
     }
 
+    /**
+     * Calculates the SHA-256 hash of the provided data string.
+     *
+     * @param data The data to hash.
+     * @return The SHA-256 hash as a hexadecimal string.
+     */
     private fun calculateHash(data: String): String {
         val digest = MessageDigest.getInstance("SHA-256")
         val hash = digest.digest(data.toByteArray(Charsets.UTF_8))

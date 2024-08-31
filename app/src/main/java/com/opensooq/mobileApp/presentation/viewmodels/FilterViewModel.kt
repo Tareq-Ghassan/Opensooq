@@ -11,11 +11,25 @@ import com.opensooq.mobileApp.data.repositories.FilterRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel class responsible for managing UI-related data for filtering options in the app.
+ * This ViewModel interacts with the FilterRepository to fetch and process data required for
+ * displaying fields and options based on a selected subcategory.
+ *
+ * @param repository The repository that handles data operations related to filters.
+ */
 class FilterViewModel(private val repository: FilterRepository) : ViewModel() {
 
+    // LiveData that holds the list of fields and their corresponding labels to display.
     private val _fieldsAndLabelsToDisplay = MutableLiveData<List<Pair<Fields, FieldLabel>>>()
     val fieldsAndLabelsToDisplay: LiveData<List<Pair<Fields, FieldLabel>>> get() = _fieldsAndLabelsToDisplay
 
+    /**
+     * Loads the fields and their corresponding labels for the given subcategory.
+     * This method is executed in the background using the IO dispatcher.
+     *
+     * @param subcategoryId The ID of the subcategory for which to load the fields and labels.
+     */
     fun loadFieldsForSubcategory(subcategoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val searchFlow = repository.getSearchFlow(subcategoryId)
@@ -36,12 +50,18 @@ class FilterViewModel(private val repository: FilterRepository) : ViewModel() {
                         fieldsAndLabels.add(Pair(field, fieldLabel))
                     }
                 }
-
+                // Post the list of fields and labels to the LiveData
                 _fieldsAndLabelsToDisplay.postValue(fieldsAndLabels)
             }
         }
     }
 
+    /**
+     * Retrieves the list of options for a specific field.
+     *
+     * @param fieldId The ID of the field for which to retrieve the options.
+     * @return A list of Options objects related to the specified field.
+     */
     fun getOptionsForField(fieldId: String): List<Options> {
         return repository.getOptionsByFieldId(fieldId)
     }

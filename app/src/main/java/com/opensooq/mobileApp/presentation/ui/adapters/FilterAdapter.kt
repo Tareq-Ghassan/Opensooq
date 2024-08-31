@@ -100,7 +100,7 @@ class FilterAdapter(
         val item = items[position]
         when (holder) {
             is NumericViewHolder -> holder.bind(item.second.labelEn, nestedItems[position])
-            is StringIconViewHolder -> holder.bind(item.first, item.second.labelEn, nestedItems[position], "")
+            is StringIconViewHolder -> holder.bind(item.first, item.second.labelEn, nestedItems[position])
             is BooleanViewHolder -> holder.bind(item.second.labelEn, nestedItems[position])
             is DefaultViewHolder -> holder.bind()
         }

@@ -9,8 +9,18 @@ import com.opensooq.mobileApp.data.models.SearchFlow
 import com.opensooq.mobileApp.data.models.SubCategory
 import org.json.JSONObject
 
+/**
+ * Utility object for handling JSON-related operations in the app.
+ */
 object JsonUtils {
 
+    /**
+     * Loads a JSON file from the assets folder and returns it as a String.
+     *
+     * @param context The context to use for accessing assets.
+     * @param fileName The name of the JSON file to load.
+     * @return The content of the JSON file as a String, or null if an error occurs.
+     */
     fun loadJsonFromAsset(context: Context, fileName: String): String? {
         return try {
             val inputStream = context.assets.open(fileName)
@@ -24,6 +34,13 @@ object JsonUtils {
             null
         }
     }
+
+    /**
+     * Parses a JSON string representing categories and returns a list of [MainCategory] objects.
+     *
+     * @param categoriesJson The JSON string to parse.
+     * @return A list of parsed [MainCategory] objects.
+     */
     fun parseCategories(categoriesJson: String): List<MainCategory> {
         val categories = mutableListOf<MainCategory>()
         val jsonObject = JSONObject(categoriesJson)
@@ -39,6 +56,12 @@ object JsonUtils {
         return categories
     }
 
+    /**
+     * Parses a single category JSON object and returns a [MainCategory] object.
+     *
+     * @param categoryObj The JSON object representing a category.
+     * @return A [MainCategory] object.
+     */
     private fun parseCategory(categoryObj: JSONObject): MainCategory {
         val category = MainCategory().apply {
             id = categoryObj.getInt("id")
@@ -64,6 +87,12 @@ object JsonUtils {
         return category
     }
 
+    /**
+     * Parses a single subcategory JSON object and returns a [SubCategory] object.
+     *
+     * @param subCategoryObj The JSON object representing a subcategory.
+     * @return A [SubCategory] object.
+     */
     private fun parseSubCategory(subCategoryObj: JSONObject): SubCategory {
         return SubCategory().apply {
             id = subCategoryObj.getInt("id")
@@ -79,7 +108,12 @@ object JsonUtils {
         }
     }
 
-
+    /**
+     * Parses a JSON string representing field labels and returns a list of [FieldLabel] objects.
+     *
+     * @param jsonString The JSON string to parse.
+     * @return A list of parsed [FieldLabel] objects.
+     */
     fun parseFieldLabels(jsonString: String): List<FieldLabel> {
         val fieldLabels = mutableListOf<FieldLabel>()
         val jsonObject = JSONObject(jsonString)
@@ -98,6 +132,12 @@ object JsonUtils {
         return fieldLabels
     }
 
+    /**
+     * Parses a JSON string representing search flows and returns a list of [SearchFlow] objects.
+     *
+     * @param jsonString The JSON string to parse.
+     * @return A list of parsed [SearchFlow] objects.
+     */
     fun parseSearchFlow(jsonString: String): List<SearchFlow> {
         val searchFlows = mutableListOf<SearchFlow>()
         val jsonObject = JSONObject(jsonString)
@@ -118,6 +158,12 @@ object JsonUtils {
         return searchFlows
     }
 
+    /**
+     * Parses a JSON string representing fields and returns a list of [Fields] objects.
+     *
+     * @param jsonString The JSON string to parse.
+     * @return A list of parsed [Fields] objects.
+     */
     fun parseFields(jsonString: String): List<Fields> {
         val fieldLabels = mutableListOf<Fields>()
         val jsonObject = JSONObject(jsonString)
@@ -142,6 +188,12 @@ object JsonUtils {
         return fieldLabels
     }
 
+    /**
+     * Parses a JSON string representing options and returns a list of [Options] objects.
+     *
+     * @param jsonString The JSON string to parse.
+     * @return A list of parsed [Options] objects.
+     */
     fun parseOptions(jsonString: String): List<Options> {
         val options = mutableListOf<Options>()
         val jsonObject = JSONObject(jsonString)

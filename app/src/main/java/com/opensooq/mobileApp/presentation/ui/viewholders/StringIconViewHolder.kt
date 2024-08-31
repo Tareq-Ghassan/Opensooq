@@ -1,5 +1,6 @@
 package com.opensooq.mobileApp.presentation.ui.viewholders
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.view.View
@@ -15,38 +16,66 @@ import com.opensooq.mobileApp.data.models.Options
 import com.opensooq.mobileApp.presentation.ui.adapters.ListStringIconAdapter
 import com.opensooq.mobileApp.presentation.ui.adapters.MultiSelectAdapter
 
+/**
+ * ViewHolder class for displaying string and icon lists with multi-selection capability.
+ *
+ * @param itemView The view representing an individual item in the RecyclerView.
+ */
 class StringIconViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val label: TextView = itemView.findViewById(R.id.item_title)
     private val recyclerView: RecyclerView = itemView.findViewById(R.id.horizontal_recycler_view)
     private val selectedItemsContainer: LinearLayout = itemView.findViewById(R.id.selected_items_container)
     private val selectedItemsText: TextView = itemView.findViewById(R.id.selected_items)
 
-    // Store selected options here
+    // List to store selected options
     private val selectedOptions = mutableListOf<Options>()
 
-    fun bind(field: Fields, labelText: String, options: List<Options>, customText: String) {
+    /**
+     * Binds the provided field and options to the ViewHolder, initializing the UI components.
+     *
+     * @param field The field associated with this item.
+     * @param labelText The text to display as the label for this item.
+     * @param options The list of options available for selection.
+     */
+    fun bind(field: Fields, labelText: String, options: List<Options>) {
         label.text = labelText
 
-        // Initialize the RecyclerView to display the selected items horizontally
+        // Add the "Any" option at the top of the list
+        val optionsWithAny = listOf(Options().apply { labelEn = "Any" }) + options
+
+        // Set up the RecyclerView to display the selected items horizontally
         recyclerView.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
-        val adapter = ListStringIconAdapter(options) { selectedIds ->
+        val adapter = ListStringIconAdapter(optionsWithAny) { selectedIds ->
             updateSelectedItemsText(selectedIds)
         }
         recyclerView.adapter = adapter
 
-        // Set the selected items text
-        selectedItemsText.text = customText
+        // Set the initial selected items text
+        selectedItemsText.text = labelText
 
-        // Handle the click to show the multi-selection dialog
+        // Show the multi-selection dialog when the container is clicked
         selectedItemsContainer.setOnClickListener {
-            showMultiSelectDialog(itemView.context, options, adapter)
+            showMultiSelectDialog(itemView.context, optionsWithAny, adapter)
         }
     }
 
+    /**
+     * Updates the selected items text based on the selected IDs.
+     *
+     * @param selectedIds A set of selected option IDs.
+     */
     private fun updateSelectedItemsText(selectedIds: Set<String>) {
         selectedItemsText.text = selectedIds.joinToString(", ")
     }
 
+    /**
+     * Displays a multi-selection dialog allowing the user to select options.
+     *
+     * @param context The context in which the dialog should be displayed.
+     * @param options The list of options available for selection.
+     * @param listAdapter The adapter managing the horizontal RecyclerView.
+     */
+    @SuppressLint("NotifyDataSetChanged")
     private fun showMultiSelectDialog(context: Context, options: List<Options>, listAdapter: ListStringIconAdapter) {
         val dialog = Dialog(context)
         dialog.setContentView(R.layout.list_string_icon_dialog)
@@ -54,12 +83,13 @@ class StringIconViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val searchView: SearchView = dialog.findViewById(R.id.search_view)
         val recyclerView: RecyclerView = dialog.findViewById(R.id.recycler_view)
         val cancelButton: Button = dialog.findViewById(R.id.btn_cancel)
+        val resetButton: Button = dialog.findViewById(R.id.btn_reset)
         val applyButton: Button = dialog.findViewById(R.id.btn_apply)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         // Map selectedIds to corresponding Options objects
-        val selectedOptions = listAdapter.getSelectedIds().mapNotNull { id -> options.find { it.id == id } }.toMutableList()
+        val selectedOptions = listAdapter.getSelectedIds().mapNotNull { labelEn -> options.find { it.labelEn == labelEn } }.toMutableList()
 
         val adapter = MultiSelectAdapter(options, selectedOptions)
         recyclerView.adapter = adapter
@@ -77,7 +107,9 @@ class StringIconViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         // Handle apply button click
         applyButton.setOnClickListener {
-            val selectedIds = adapter.getSelectedOptions().map { it.labelEn }.toSet()
+            selectedOptions.addAll(adapter.getSelectedOptions())
+
+            val selectedIds = selectedOptions.map { it.labelEn }.toSet()
             updateSelectedItemsText(selectedIds)
 
             // Update the ListStringIconAdapter with the selected options
@@ -89,6 +121,19 @@ class StringIconViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Handle cancel button click
         cancelButton.setOnClickListener {
             dialog.dismiss()
+        }
+
+        // Handle cancel button click
+        resetButton.setOnClickListener {
+            selectedOptions.clear()
+            val selectedIds = selectedOptions.map { it.labelEn }.toSet()
+
+            // Update the ListStringIconAdapter with the selected options
+            listAdapter.updateSelection(selectedIds)
+            adapter.notifyDataSetChanged()
+
+            listAdapter.updateSelection(emptySet())
+            selectedItemsText.text = label.text
         }
 
         dialog.show()
