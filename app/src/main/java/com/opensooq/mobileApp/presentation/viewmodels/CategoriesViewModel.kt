@@ -20,6 +20,12 @@ class CategoriesViewModel(private val repository: CategoriesRepository) : ViewMo
     // LiveData to hold the list of subcategories based on the selected category
     val subCategoriesLiveData: MutableLiveData<MutableList<SubCategory>> = MutableLiveData()
 
+    // LiveData to hold the filtered categories for search
+    val filteredCategoriesLiveData: MutableLiveData<MutableList<MainCategory>> = MutableLiveData()
+
+    // LiveData to hold the filtered subcategories for search
+    val filteredSubCategoriesLiveData: MutableLiveData<MutableList<SubCategory>> = MutableLiveData()
+
     // Initializer block to fetch categories when the ViewModel is created
     init {
         getCategories()
@@ -78,11 +84,41 @@ class CategoriesViewModel(private val repository: CategoriesRepository) : ViewMo
     }
 
     /**
-     * Closes the Realm database connection when the ViewModel is cleared.
+     * Searches categories based on the provided query string.
+     * Updates filteredCategoriesLiveData with the matching categories.
+     *
+     * @param query The search query string.
      */
-    override fun onCleared() {
-        super.onCleared()
-        RealmDatabase.close()
+    fun searchCategories(query: String) {
+        val filteredCategories = categoriesLiveData.value?.filter { category ->
+            // Check if the category's label matches the query
+            val categoryMatches = category.labelEn.contains(query, ignoreCase = true)
+
+            // Check if any subcategory's label matches the query
+            val subCategoryMatches = category.subCategories.any { subCategory ->
+                subCategory.labelEn.contains(query, ignoreCase = true)
+            }
+
+            // Include the category if it or any of its subcategories match the query
+            categoryMatches || subCategoryMatches
+        }?.toMutableList()
+
+        filteredCategoriesLiveData.value = filteredCategories ?: mutableListOf()
+    }
+
+
+    /**
+     * Searches subcategories based on the provided query string.
+     * Updates filteredSubCategoriesLiveData with the matching subcategories.
+     *
+     * @param query The search query string.
+     */
+    fun searchSubCategories(query: String) {
+        val filteredSubCategories = subCategoriesLiveData.value?.filter {
+            it.labelEn.contains(query, ignoreCase = true) || it.label.contains(query, ignoreCase = true)
+        }?.toMutableList()
+
+        filteredSubCategoriesLiveData.value = filteredSubCategories ?: mutableListOf()
     }
 
     /**

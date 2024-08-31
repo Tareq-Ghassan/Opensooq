@@ -6,9 +6,6 @@
     android:layout_height="wrap_content"
     android:padding="8dp">
 
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    tools:context=".presentation.ui.SubCategoryActivity"-->
-<!--    -->
     <ImageView
         android:id="@+id/categoryIcon"
         android:layout_width="60dp"
