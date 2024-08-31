@@ -64,7 +64,8 @@ dependencies {
 
     // Recyclerview
     implementation(libs.androidx.recyclerview)
-    implementation(libs.picasso)
 
+    // Image loader
+    implementation(libs.picasso)
 
 }
