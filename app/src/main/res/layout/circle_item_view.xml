@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,14 +5,16 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:layout_margin="8dp">
 
     <FrameLayout
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
+        android:layout_margin="8dp"
         tools:ignore="UselessParent">
 
+        <!-- Circle Image Background -->
         <ImageView
             android:id="@+id/circle_image"
             android:layout_width="match_parent"
@@ -22,6 +23,7 @@
             android:contentDescription="@string/image_icon"
             android:scaleType="centerCrop" />
 
+        <!-- Circle Text Background -->
         <TextView
             android:id="@+id/circle_text"
             android:layout_width="match_parent"
@@ -31,6 +33,16 @@
             android:textSize="14sp"
             android:visibility="gone"
             android:background="@drawable/circle_background_selector"/>
+
+        <!-- Check Badge -->
+        <ImageView
+            android:id="@+id/check_badge"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="top|end"
+            android:contentDescription="@string/image_icon"
+            android:visibility="gone"
+            android:src="@drawable/checkmark_badge"/>
     </FrameLayout>
 
 </LinearLayout>

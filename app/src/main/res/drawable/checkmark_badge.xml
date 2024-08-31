@@ -1,0 +1,16 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background Circle -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/blue"/>
+            <size
+                android:width="16dp"
+                android:height="16dp"/>
+        </shape>
+    </item>
+
+    <!-- Checkmark -->
+    <item android:drawable="@drawable/ic_check"
+        android:gravity="center"/>
+</layer-list>

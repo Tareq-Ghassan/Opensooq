@@ -36,11 +36,11 @@ class NumericViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(labelText: String, options: List<Options>) {
         label.text = labelText
         fromRowContainer.setOnClickListener {
-            showRangeSelectDialog(itemView.context, options, true)
+            showRangeSelectDialog(itemView.context, options, true,labelText)
         }
 
         toRowContainer.setOnClickListener {
-            showRangeSelectDialog(itemView.context, options, false)
+            showRangeSelectDialog(itemView.context, options, false,labelText)
         }
     }
 
@@ -51,7 +51,7 @@ class NumericViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
      * @param options The list of options available for selection.
      * @param isFromTab Indicates whether the "From" tab should be selected initially.
      */
-    private fun showRangeSelectDialog(context: Context, options: List<Options>, isFromTab: Boolean) {
+    private fun showRangeSelectDialog(context: Context, options: List<Options>, isFromTab: Boolean,labelText: String) {
         val dialog = Dialog(context)
         dialog.setContentView(R.layout.list_numeric_dialog)
 
@@ -59,10 +59,12 @@ class NumericViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
         val tabLayout: TabLayout = dialog.findViewById(R.id.tab_layout)
+        val title: TextView = dialog.findViewById(R.id.info_text)
         val searchView: SearchView = dialog.findViewById(R.id.search_view)
         val recyclerView: RecyclerView = dialog.findViewById(R.id.recycler_view)
         val cancelButton: Button = dialog.findViewById(R.id.btn_cancel)
 
+        title.text= labelText
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         // Add the "Any" option at the top of the list
@@ -89,7 +91,7 @@ class NumericViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         handleTabSelection(tabLayout, recyclerView, fromAdapter, toAdapter, searchView)
 
         // Implement search functionality to filter options
-        implementSearchFunctionality(searchView, tabLayout, optionsWithAny, recyclerView, fromAdapter, toAdapter, dialog)
+        implementSearchFunctionality(searchView, tabLayout, optionsWithAny, recyclerView, dialog)
 
         // Handle the cancel button click
         cancelButton.setOnClickListener { dialog.dismiss() }
@@ -142,8 +144,6 @@ class NumericViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
      * @param tabLayout The TabLayout used for switching between tabs.
      * @param optionsWithAny The list of options including the "Any" option.
      * @param recyclerView The RecyclerView to display the filtered options.
-     * @param fromAdapter The adapter for the "From" tab.
-     * @param toAdapter The adapter for the "To" tab.
      * @param dialog The dialog to manage visibility.
      */
     private fun implementSearchFunctionality(
@@ -151,8 +151,6 @@ class NumericViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         tabLayout: TabLayout,
         optionsWithAny: List<Options>,
         recyclerView: RecyclerView,
-        fromAdapter: DialogNumericAdapter,
-        toAdapter: DialogNumericAdapter,
         dialog: Dialog
     ) {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

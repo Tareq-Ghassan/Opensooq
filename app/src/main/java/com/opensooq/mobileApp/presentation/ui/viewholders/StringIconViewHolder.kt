@@ -55,7 +55,7 @@ class StringIconViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         // Show the multi-selection dialog when the container is clicked
         selectedItemsContainer.setOnClickListener {
-            showMultiSelectDialog(itemView.context, optionsWithAny, adapter)
+            showMultiSelectDialog(itemView.context, optionsWithAny, adapter,labelText)
         }
     }
 
@@ -76,7 +76,7 @@ class StringIconViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
      * @param listAdapter The adapter managing the horizontal RecyclerView.
      */
     @SuppressLint("NotifyDataSetChanged")
-    private fun showMultiSelectDialog(context: Context, options: List<Options>, listAdapter: ListStringIconAdapter) {
+    private fun showMultiSelectDialog(context: Context, options: List<Options>, listAdapter: ListStringIconAdapter,labelText:String) {
         val dialog = Dialog(context)
         dialog.setContentView(R.layout.list_string_icon_dialog)
 
@@ -85,6 +85,9 @@ class StringIconViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val cancelButton: Button = dialog.findViewById(R.id.btn_cancel)
         val resetButton: Button = dialog.findViewById(R.id.btn_reset)
         val applyButton: Button = dialog.findViewById(R.id.btn_apply)
+        val title: TextView = dialog.findViewById(R.id.info_text)
+
+        title.text= labelText
 
         recyclerView.layoutManager = LinearLayoutManager(context)
 
