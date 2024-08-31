@@ -56,7 +56,7 @@ class BooleanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         gridLayout.columnCount = maxColumnCount
 
         // Now add the ToggleButtons to the GridLayout
-        options.forEachIndexed { _, option ->
+        options.forEachIndexed { index, option ->
             val toggleButton = ToggleButton(itemView.context).apply {
                 textOn = option.labelEn
                 textOff = option.labelEn
