@@ -1,6 +1,7 @@
 package com.opensooq.mobileApp.data.repositories
 
 import android.content.Context
+import android.util.Log
 import com.opensooq.mobileApp.data.models.MainCategory
 import com.opensooq.mobileApp.data.models.Metadata
 import com.opensooq.mobileApp.utils.JsonUtils
@@ -86,6 +87,10 @@ class CategoriesRepository(private val realm: Realm, private val context: Contex
      * @param metadata The existing metadata, or null if not present.
      */
     private fun updateSearchFlowAndFieldsLabel(assignJson: String, newHash: String, metadata: Metadata?) {
+        if (assignJson.isEmpty()) {
+            Log.e("CategoriesRepository", "assignJson is empty")
+            return
+        }
         realm.writeBlocking {
             val searchFlowList = JsonUtils.parseSearchFlow(assignJson)
             val fieldLabelsList = JsonUtils.parseFieldLabels(assignJson)
@@ -113,6 +118,10 @@ class CategoriesRepository(private val realm: Realm, private val context: Contex
      * @param metadata The existing metadata, or null if not present.
      */
     private fun updateOptionsAndFields(attributesJson: String, newHash: String, metadata: Metadata?) {
+        if (attributesJson.isEmpty()) {
+            Log.e("CategoriesRepository", "assignJson is empty")
+            return
+        }
         realm.writeBlocking {
             val optionsList = JsonUtils.parseOptions(attributesJson)
             val fieldList = JsonUtils.parseFields(attributesJson)
