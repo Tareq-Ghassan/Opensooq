@@ -1,6 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -18,8 +25,10 @@
 
     <!-- Grid Items -->
     <GridLayout
+        android:id="@+id/boolean_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/border_drawable"
         android:columnCount="3"
         android:orientation="horizontal">
 
@@ -29,8 +38,7 @@
             android:textOn="Air Conditioning"
             android:textOff="Air Conditioning"
             android:checked="false"
-            android:background="@drawable/toggle_button_background"
-            android:layout_margin="4dp" />
+            android:background="@drawable/toggle_button_background" />
 
         <ToggleButton
             android:layout_width="wrap_content"
@@ -38,11 +46,11 @@
             android:textOn="Heating"
             android:textOff="Heating"
             android:checked="false"
-            android:background="@drawable/toggle_button_background"
-            android:layout_margin="4dp" />
+            android:background="@drawable/toggle_button_background" />
 
-        <!-- Add more ToggleButtons as needed -->
 
     </GridLayout>
 
 </LinearLayout>
+
+</androidx.cardview.widget.CardView>

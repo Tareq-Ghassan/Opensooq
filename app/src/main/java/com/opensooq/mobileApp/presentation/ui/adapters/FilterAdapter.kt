@@ -27,7 +27,7 @@ class FilterAdapter(private val items: List<Pair<Fields, FieldLabel>>,private va
             "list_numeric" -> VIEW_TYPE_NUMERIC
             "list_string_icon" -> VIEW_TYPE_STRING_ICON
             "list_string" -> VIEW_TYPE_STRING
-            "List_string_boolean" -> VIEW_TYPE_STRING_BOOLEAN
+            "list_string_boolean" -> VIEW_TYPE_STRING_BOOLEAN
             else -> VIEW_TYPE_DEFAULT
         }
     }
@@ -73,7 +73,7 @@ class FilterAdapter(private val items: List<Pair<Fields, FieldLabel>>,private va
         when (holder) {
             is NumericViewHolder -> holder.bind(item.second.labelEn, nestedItems[position])
             is StringIconViewHolder -> holder.bind(item.first, item.second.labelEn, nestedItems[position], "")
-            is BooleanViewHolder ->  holder.bind(item.second.labelEn)
+            is BooleanViewHolder ->  holder.bind(item.second.labelEn, nestedItems[position])
             is DefaultViewHolder -> holder.bind()
         }
     }

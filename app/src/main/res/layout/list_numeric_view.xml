@@ -57,7 +57,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+                android:padding="8dp"
+                android:text="@string/any"
                 android:textColor="@android:color/black" />
+
         </LinearLayout>
 
         <!-- Divider -->
@@ -94,6 +97,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:padding="8dp"
+                android:text="@string/any"
                 android:textColor="@android:color/black" />
         </LinearLayout>
 
