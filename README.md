@@ -31,7 +31,7 @@ Upon app launch, the app checks whether the JSON files (representing categories,
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/opensooq-assignment.git
+   git clone https://github.com/Tareq-Ghassan/opensooq-assignment.git
    ```
 2. **Open the project in Android Studio**.
 3. **Build and run the app** on an Android emulator or physical device.
